@@ -9,8 +9,8 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        Map<String,Integer> map = new HashMap<>();
-        List<String> results = new ArrayList<>();
+        // TreeMap을 사용하여 자동 정렬
+        Map<String,Integer> map = new TreeMap<>();
 
         for(int i = 0; i < n; i++){
             String s = br.readLine();
@@ -20,13 +20,7 @@ public class Main {
         }
 
         for(Map.Entry<String, Integer> s : map.entrySet()){
-            results.add(s.getKey() + " " + s.getValue());
-        }
-
-        Collections.sort(results);
-
-        for(int i = 0; i < results.size(); i++){
-            System.out.println(results.get(i));
+            System.out.println(s.getKey() + " " + s.getValue());
         }
     }
 }

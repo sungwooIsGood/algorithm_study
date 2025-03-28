@@ -6,69 +6,48 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
 
-        int team1Score = 0, team2Score = 0;  // 팀 점수
-        int lastTime = 0;                    // 이전 득점 시간 (초)
-        int leadTime1 = 0, leadTime2 = 0;    // 리드한 시간
-        int winningTeam = 0;                 // 현재 이기고 있는 팀 (1, 2, 0)
+        int n = Integer.parseInt(br.readLine());
+        int team1Score = 0;
+        int team2Score = 0;
+        int team1GoalTime = 0;
+        int team2GoalTime = 0;
+        int lastLeadTime = 0;
+        int endTime = 48*60;
 
-        for (int i = 0; i < N; i++) {
-            String[] input = br.readLine().split(" ");
-            int team = Integer.parseInt(input[0]);
-            int time = convertToSeconds(input[1]);
+        for(int i = 0; i < n; i++) {
+            String[] s = br.readLine().split(" ");
+            String[] ss = s[1].split(":");
+            int goalTeam = Integer.parseInt(s[0]);
+            int goalTime = (Integer.parseInt(ss[0]) * 60) + Integer.parseInt(ss[1]);
 
-            // 현재 누가 이기고 있었는지 확인하고 시간 추가
-            if (team1Score > team2Score) {
-                leadTime1 += (time - lastTime);
-            } else if (team2Score > team1Score) {
-                leadTime2 += (time - lastTime);
+            if(team1Score > team2Score){
+                team1GoalTime += goalTime - lastLeadTime;
+            } else if(team2Score > team1Score){
+                team2GoalTime += goalTime - lastLeadTime;
             }
 
-            // 점수 갱신
-            if (team == 1) {
+            if(goalTeam == 1){
                 team1Score++;
             } else {
                 team2Score++;
             }
 
-            // 이기고 있는 팀 갱신
-            if (team1Score > team2Score) {
-                winningTeam = 1;
-            } else if (team1Score < team2Score) {
-                winningTeam = 2;
-            } else {
-                winningTeam = 0;
-            }
-
-            lastTime = time;
+            lastLeadTime = goalTime;
         }
 
-        // 마지막 득점 이후 남은 시간 반영
-        int totalTime = 48 * 60;  // 48분 = 2880초
-        if (winningTeam == 1) {
-            leadTime1 += (totalTime - lastTime);
-        } else if (winningTeam == 2) {
-            leadTime2 += (totalTime - lastTime);
+        if(team1Score > team2Score){
+            team1GoalTime += endTime - lastLeadTime;
+        } else if(team2Score > team1Score) {
+            team2GoalTime += endTime - lastLeadTime;
         }
 
-        // 초를 MM:SS 형식으로 변환하여 출력
-        System.out.println(convertToMMSS(leadTime1));
-        System.out.println(convertToMMSS(leadTime2));
-    }
 
-    // MM:SS 형식을 초로 변환
-    private static int convertToSeconds(String time) {
-        String[] parts = time.split(":");
-        int minutes = Integer.parseInt(parts[0]);
-        int seconds = Integer.parseInt(parts[1]);
-        return minutes * 60 + seconds;
-    }
-
-    // 초를 MM:SS 형식으로 변환
-    private static String convertToMMSS(int time) {
-        int minutes = time / 60;
-        int seconds = time % 60;
-        return String.format("%02d:%02d", minutes, seconds);
+        int min1 = team1GoalTime / 60;
+        int sec1 = team1GoalTime % 60;
+        int min2 = team2GoalTime / 60;
+        int sec2 = team2GoalTime % 60;
+        System.out.println(String.format("%02d:%02d", min1, sec1));
+        System.out.println(String.format("%02d:%02d", min2, sec2));
     }
 }

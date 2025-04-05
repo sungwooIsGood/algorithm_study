@@ -9,31 +9,28 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n]; // 입력 배열
-        int[] result = new int[n]; // 정답 배열
+        int[] arr = new int[n]; // 저장 배열
+        boolean[] visited = new boolean[n]; // 방문 확인 배열
         String[] s = br.readLine().split(" ");
 
         // 입력 받기
         for(int i = 0; i < n; i++){
-            arr[i] = Integer.parseInt(s[i]);
-        }
-
-        // 1번부터 탐색하며 자리 배치
-        for(int i = 0; i < n; i++) {
-            int count = arr[i]; // 2
+            int count = Integer.parseInt(s[i]);
             for(int j = 0; j < n; j++){
-                if(result[j] == 0){ // 빈자리인지 확인
-                    if(count == 0){
-                        result[j] = i + 1; // 자리
+                if(!visited[j]){
+                    if(count == arr[j]){
+                        visited[j] = true;
+                        arr[j] = i + 1;
                         break;
+                    } else {
+                        count--;
                     }
-                    count--;
                 }
             }
         }
 
         for(int i = 0; i < n; i++){
-            System.out.print(result[i] + " ");
+            System.out.print(arr[i] + " ");
         }
     }
 }
